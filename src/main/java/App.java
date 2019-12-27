@@ -189,18 +189,22 @@ public class App {
         ObservableList<XYChart.Data> dataBack = FXCollections.observableArrayList();
         XYChart.Series series = new XYChart.Series();
         XYChart.Series seriesback = new XYChart.Series();
-        double x = x0, y = y0;
+        double x = x0, y = y0 , xt, yt;
         data.add(new XYChart.Data<Double, Double>(x0, y0));
         for (int i = 0; i < N/2; i++) {
-            x = x + tau * functionX.apply(x, y);
-            y = y + tau * functionY.apply(x, y);
+            xt = x + tau * functionX.apply(x, y);
+            yt = y + tau * functionY.apply(x, y);
+            x=xt;
+            y=yt;
             data.add(new XYChart.Data<Double, Double>(x, y));
         }
         x = x0;
         y = y0;
         for (int i = 0; i < N/2; i++) {
-            x = x - tau * functionX.apply(x, y);
-            y = y - tau * functionY.apply(x, y);
+            xt = x - tau * functionX.apply(x, y);
+            yt = y - tau * functionY.apply(x, y);
+            x=xt;
+            y=yt;
             //data.add(new XYChart.Data<Double, Double>(x, y));
             dataBack.add(new XYChart.Data<Double, Double>(x, y));
         }
