@@ -10,6 +10,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 
@@ -155,6 +156,12 @@ public class App {
         labelDelta.setText(deltaCode);
         labelPhi.setText(phiCode);
         setValues(new ActionEvent());
+        lineChart.getScene().addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event){
+                
+            }
+        });
         lineChart.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -171,8 +178,8 @@ public class App {
     }
 
     private void setXY(MouseEvent event){
-        this.x0 = event.getX();
-        this.y0 = event.getY();
+        this.x0 = lineChart.getXAxis().getValueForDisplay(event.getX()).doubleValue();
+        this.y0 = lineChart.getYAxis().getValueForDisplay(event.getY()).doubleValue();
         labelX0.setText(Double.toString(this.x0));
         labelY0.setText(Double.toString(this.y0));
     }
@@ -184,14 +191,14 @@ public class App {
         XYChart.Series seriesback = new XYChart.Series();
         double x = x0, y = y0;
         data.add(new XYChart.Data<Double, Double>(x0, y0));
-        for (int i = 0; i < N; i++) {
+        for (int i = 0; i < N/2; i++) {
             x = x + tau * functionX.apply(x, y);
             y = y + tau * functionY.apply(x, y);
             data.add(new XYChart.Data<Double, Double>(x, y));
         }
-        //x = x0;
-        //y = y0;
-        for (int i = 0; i < N; i++) {
+        x = x0;
+        y = y0;
+        for (int i = 0; i < N/2; i++) {
             x = x - tau * functionX.apply(x, y);
             y = y - tau * functionY.apply(x, y);
             //data.add(new XYChart.Data<Double, Double>(x, y));
@@ -226,8 +233,6 @@ public class App {
         D = Double.parseDouble(textD.getText());
         tau = Double.parseDouble(textTau.getText());
         N = Integer.parseInt(textN.getText());
-        x0=0;
-        y0=0;
         xAxis.setLowerBound(A);
         xAxis.setUpperBound(B);
         xAxis.setTickUnit(tau);
